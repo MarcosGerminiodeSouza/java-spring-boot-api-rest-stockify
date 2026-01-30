@@ -1,4 +1,4 @@
-package com.marcos;
+package com.marcos.stockify;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
