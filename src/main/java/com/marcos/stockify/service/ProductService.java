@@ -1,13 +1,14 @@
 package com.marcos.stockify.service;
 
+import com.marcos.stockify.domain.mapper.ProductMapper;
 import com.marcos.stockify.dto.ProductRequestDTO;
 import com.marcos.stockify.dto.ProductResponseDTO;
 import com.marcos.stockify.entity.Product;
 import com.marcos.stockify.exception.ResourceNotFoundException;
-import com.marcos.stockify.repository.ProductRepository;
+import com.marcos.stockify.domain.repository.ProductRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class ProductService {
@@ -19,57 +20,33 @@ public class ProductService {
     }
 
     public ProductResponseDTO create(ProductRequestDTO dto) {
-        Product productDto = new Product(dto.getName(), dto.getPrice(), dto.getQuantity());
+        Product product = new Product(dto.name(), dto.price(), dto.quantity());
 
-        Product product = repository.save(productDto);
-
-        return new ProductResponseDTO(
-                product.getId(),
-                product.getName(),
-                product.getPrice(),
-                product.getQuantity(),
-                product.getActive()
-        );
-    }
-
-    public List<ProductResponseDTO> findAllActive() {
-        return repository.findByActiveTrue()
-                .stream()
-                .map(p -> new ProductResponseDTO(
-                        p.getId(),
-                        p.getName(),
-                        p.getPrice(),
-                        p.getQuantity(),
-                        p.getActive()
-                ))
-                .toList();
+        return ProductMapper.toResponse(repository.save(product));
     }
 
     public ProductResponseDTO update(Long id, ProductRequestDTO dto) {
         Product product = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
-        product.setName(dto.getName());
-        product.setPrice(dto.getPrice());
-        product.setQuantity(dto.getQuantity());
-
-        Product updated = repository.save(product);
-
-        return new ProductResponseDTO(
-                updated.getId(),
-                updated.getName(),
-                updated.getPrice(),
-                updated.getQuantity(),
-                updated.getActive()
-        );
+        product.update(dto.name(), dto.price(), dto.quantity());
+        return ProductMapper.toResponse(repository.save(product));
     }
 
     public void deactivate(Long id) {
         Product product = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
-        product.setActive(false);
+        product.deactivate();
         repository.save(product);
     }
 
+    public Page<ProductResponseDTO> listActive(Pageable pageable) {
+        return repository.findByActiveTrue(pageable).map(ProductMapper::toResponse);
+    }
+
+    public Page<ProductResponseDTO> searchByName(String name, Pageable pageable) {
+        return repository.findByActiveTrueAndNameContainingIgnoreCase(name, pageable)
+                .map(ProductMapper::toResponse);
+    }
 }

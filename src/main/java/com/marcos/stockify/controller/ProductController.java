@@ -4,6 +4,8 @@ import com.marcos.stockify.dto.ProductRequestDTO;
 import com.marcos.stockify.dto.ProductResponseDTO;
 import com.marcos.stockify.service.ProductService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,10 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/products")
@@ -34,8 +35,16 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<ProductResponseDTO> listActive() {
-        return service.findAllActive();
+    public Page<ProductResponseDTO> list(Pageable pageable) {
+        return service.listActive(pageable);
+    }
+
+    @GetMapping("/search")
+    public Page<ProductResponseDTO> search(
+            @RequestParam String name,
+            Pageable pageable
+    ) {
+        return service.searchByName(name, pageable);
     }
 
     @PutMapping("/{id}")
@@ -51,5 +60,4 @@ public class ProductController {
     public void deactivate(@PathVariable Long id) {
         service.deactivate(id);
     }
-
 }
