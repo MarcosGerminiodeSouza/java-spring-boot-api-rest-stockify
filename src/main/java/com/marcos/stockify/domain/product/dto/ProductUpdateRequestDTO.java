@@ -1,13 +1,12 @@
-package com.marcos.stockify.dto;
+package com.marcos.stockify.domain.product.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
 
 import java.math.BigDecimal;
 
-public record ProductRequestDTO (
+public record ProductUpdateRequestDTO(
 
         @NotBlank
         String name,
@@ -17,6 +16,7 @@ public record ProductRequestDTO (
         BigDecimal price,
 
         @NotNull
-        @PositiveOrZero
+        @Positive
         Integer quantity
-) {}
+) {
+}

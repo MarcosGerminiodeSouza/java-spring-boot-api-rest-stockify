@@ -1,4 +1,4 @@
-package com.marcos.stockify.dto;
+package com.marcos.stockify.domain.product.dto;
 
 import java.math.BigDecimal;
 

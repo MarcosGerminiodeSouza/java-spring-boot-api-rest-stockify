@@ -1,8 +1,10 @@
-package com.marcos.stockify.controller;
+package com.marcos.stockify.api.controller;
 
-import com.marcos.stockify.dto.ProductRequestDTO;
-import com.marcos.stockify.dto.ProductResponseDTO;
-import com.marcos.stockify.service.ProductService;
+import com.marcos.stockify.domain.product.dto.ProductCreateRequestDTO;
+import com.marcos.stockify.domain.product.dto.ProductRequestDTO;
+import com.marcos.stockify.domain.product.dto.ProductResponseDTO;
+import com.marcos.stockify.domain.product.dto.ProductUpdateRequestDTO;
+import com.marcos.stockify.domain.product.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +32,7 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductResponseDTO create(@RequestBody @Valid ProductRequestDTO dto) {
+    public ProductResponseDTO create(@RequestBody @Valid ProductCreateRequestDTO dto) {
         return service.create(dto);
     }
 
@@ -50,14 +52,14 @@ public class ProductController {
     @PutMapping("/{id}")
     public ProductResponseDTO update(
             @PathVariable Long id,
-            @RequestBody @Valid ProductRequestDTO dto
+            @RequestBody @Valid ProductUpdateRequestDTO dto
     ) {
         return service.update(id, dto);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deactivate(@PathVariable Long id) {
-        service.deactivate(id);
+    public void delete(@PathVariable Long id) {
+        service.delete(id);
     }
 }

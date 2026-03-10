@@ -1,7 +1,7 @@
-package com.marcos.stockify.domain.mapper;
+package com.marcos.stockify.domain.product.mapper;
 
-import com.marcos.stockify.dto.ProductResponseDTO;
-import com.marcos.stockify.entity.Product;
+import com.marcos.stockify.domain.product.dto.ProductResponseDTO;
+import com.marcos.stockify.domain.product.entity.Product;
 
 public class ProductMapper {
 

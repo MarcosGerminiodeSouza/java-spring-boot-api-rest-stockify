@@ -1,4 +1,4 @@
-package com.marcos.stockify.entity;
+package com.marcos.stockify.domain.product.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
